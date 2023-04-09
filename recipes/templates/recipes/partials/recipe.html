@@ -46,7 +46,7 @@
             <div class="recipe-meta recipe-preparation">
                 <h3 class="recipe-meta-title"><i class="fas fa-stopwatch"></i> Preparo</h3>
                 <div class="recipe-meta-text">
-                    {{ recipe.preparation_time }} {{ recipe.peparation_time_unit }}
+                    {{ recipe.preparation_time }} {{ recipe.preparation_time_unit }}
                 </div>
             </div>
             <div class="recipe-meta recipe-servings">
@@ -67,10 +67,10 @@
 
         {% if is_detail_page is True %}
             <div class="preparation-steps">
-                {% if recipe.peparation_steps_is_html is True %}
-                    {{ recipe.peparation_steps|safe }}  
+                {% if recipe.preparation_steps_is_html is True %}
+                    {{ recipe.preparation_steps|safe }}  
                 {% else %}
-                    {{ recipe.peparation_steps|linebreaksbr }}
+                    {{ recipe.preparation_steps|linebreaksbr }}
                 {% endif %}
             </div>
         {% endif %}
