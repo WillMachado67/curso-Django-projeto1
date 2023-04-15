@@ -15,7 +15,7 @@ class RecipeModelTest(RecipeTestBase):
             author=self.make_author(username='newuser'),
             title='Recipe Title',
             description='Recipe Descripition',
-            slug='recipe-slug',
+            slug='recipe-slug-2',
             preparation_time=10,
             preparation_time_unit='Minutos',
             servings=5,
@@ -25,27 +25,6 @@ class RecipeModelTest(RecipeTestBase):
         recipe.full_clean()
         recipe.save()
         return recipe
-
-    # def test_recipe_title_raises_error_if_title_has_more_than_65_chars(self):
-    #     self.recipe.title = 'A' * 70
-    #     with self.assertRaises(ValidationError):
-    #         self.recipe.full_clean()
-        # self.recipe.save()
-        # self.fail(self.recipe.title)
-
-    # def test_recipe_fields_max_length(self):
-    #     fields = [
-    #         ('title', 65),
-    #         ('description', 165),
-    #         ('preparation_time_unit', 65),
-    #         ('servings_unit', 65),
-    #     ]
-
-    #     for field, max_length in fields:
-    #         with self.subTest(field=field, max_length=max_length):
-    #             setattr(self.recipe, field, 'A' * (max_length + 1))
-    #             with self.assertRaises(ValidationError):
-    #                 self.recipe.full_clean()
 
     @parameterized.expand([
         ('title', 65),
