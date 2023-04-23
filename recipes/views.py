@@ -1,6 +1,7 @@
 
 import os
 
+from django.contrib import messages
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
@@ -8,7 +9,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404, render
 from recipes.models import Recipe
 from utils.pagination import make_pagination
 
-PER_PAGE = os.environ.get('PER_PAGE', 6)
+PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 
 
 def home(request):
@@ -17,6 +18,8 @@ def home(request):
     ).order_by('-id')
 
     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
+
+    # messages.error(request, 'Menssagem da home.')
 
     return render(request, 'recipes/pages/home.html', context={
         'recipes': page_obj,
@@ -50,6 +53,8 @@ def recipe(request, id):
 
 
 def search(request):
+    # messages.warning(request, 'Menssagem durante a pesquisa.')
+
     search_term = request.GET.get('q', '').strip()
 
     if not search_term:
