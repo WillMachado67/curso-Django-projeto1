@@ -3,8 +3,13 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 
+def add_attr(field, attr_name, attr_new_val):
+    existig = field.widget.attrs.get(attr_name, '')
+    field.widget.attrs[attr_name] = f'{existig} {attr_new_val}'.strip()
+
+
 def add_placeholder(field, placeholder_val):
-    field.widget.attrs['placeholder'] = placeholder_val
+    add_attr(field, 'placeholder', placeholder_val)
 
 
 class RegisterForm(forms.ModelForm):
@@ -83,3 +88,17 @@ class RegisterForm(forms.ModelForm):
             )
 
         return data
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if password != password2:
+            password_confirmation_error = ValidationError(
+                'password and password2 must be equal.'
+            )
+            raise ValidationError({
+                'password': password_confirmation_error,
+                'password2': password_confirmation_error,
+            })
