@@ -4,7 +4,7 @@ from django import forms
 
 from recipes.models import Recipe
 from utils.django_form import add_attr
-from utils.string import is_positive_number
+from utils.strings import is_positive_number
 
 
 class AuthorRecipeForm(forms.ModelForm):

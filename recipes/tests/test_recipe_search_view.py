@@ -13,7 +13,7 @@ class RecipeSearchViewTest(RecipeTestBase):
 
     def test_recipe_search_uses_view_function(self):
         resolved = resolve(reverse('recipes:search'))
-        self.assertIs(resolved.func, views.search)
+        self.assertIs(resolved.func.view_class, views.RecipeListViewSearch)
 
     def test_recipe_search_loads_correct_template(self):
         url = reverse('recipes:search') + '?q=teste'
@@ -29,7 +29,7 @@ class RecipeSearchViewTest(RecipeTestBase):
         url = reverse('recipes:search') + '?q=teste'
         response = self.client.get(url)
         self.assertIn('Search for &quot;teste&quot;',
-                      response.content.decode('utf-8'))
+                    response.content.decode('utf-8'))
 
     def test_recipe_search_can_find_recipe_by_title(self):
         title1 = 'This is recipe one'
