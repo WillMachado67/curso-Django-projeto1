@@ -3,8 +3,11 @@ import os
 
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from django.http import Http404, JsonResponse
+from django.http import Http404
+from django.http.response import JsonResponse
 from django.shortcuts import render
+from django.utils import translation
+from django.utils.translation import gettext as _
 from django.views.generic import DetailView, ListView
 
 from recipes.models import Recipe
@@ -41,13 +44,14 @@ class RecipeListViewBase(ListView):
     ordering = ['-id']
     template_name = 'recipes/pages/home.html'
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
         queryset = queryset.filter(is_published=True)
-        queryset = queryset.select_related('author', 'category')
-        # queryset = queryset.prefetch_related('author', 'category')
+        queryset = queryset.select_related('author', 'category', 'author__profile')
+        # queryset = queryset.prefetch_related('author__profile')
+
         return queryset
-    
+
     def get_context_data(self, *args,**kwargs):
         context = super().get_context_data( *args, **kwargs)
         page_obj, pagination_range = make_pagination(
@@ -55,8 +59,15 @@ class RecipeListViewBase(ListView):
             context.get('recipes'),
             PER_PAGE
             )
+        
+        html_language = translation.get_language()
+
         context.update(
-            {'recipes': page_obj, 'pagination_range': pagination_range}
+            {
+                'recipes': page_obj,
+                'pagination_range': pagination_range,
+                'html_language': html_language,
+                }
         )
         return context
 
@@ -79,8 +90,11 @@ class RecipeListViewCategory(RecipeListViewBase):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
+        category_traslation = _('Category')
+
         context.update({
-            'title': f'{context.get("recipes")[0].category.name} - Category | '
+            'title': f'{context.get("recipes")[0].category.name} - '
+            f'{category_traslation} | '
         })
 
         return context
